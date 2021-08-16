@@ -15,4 +15,3 @@ require_once __CORE__ . 'database/Connection.php';
 
 Connection::make($config);
 
-echo 'Готово';
