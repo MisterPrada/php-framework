@@ -5,8 +5,6 @@ class Main
 {
     public function index($id)
     {
-        echo route('cat', 20, 50);
-        echo '<br>';
         echo 'Успешно запущенный контроллер ' . $id;
     }
 

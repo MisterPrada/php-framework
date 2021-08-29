@@ -10,26 +10,45 @@ class Route
     public $controller = [];
     public $routeUri;
     public $method;
+    public $middleware = [];
+    static public $groupMiddleware = [];
+    static public $prefix;
     static public $routeList = [];
 
     static public function get(string $route, array $controller): Route
     {
-        $routeObj = new static();
-        $routeObj->method = 'GET';
-        $routeObj->routeUri = $route;
-        $routeObj->controller = $controller;
-
-        return self::$routeList[$routeObj->method . ':' . $route] = $routeObj;
+        return static::createRoute($route, $controller, 'GET');
     }
 
     static public function post(string $route, array $controller): Route
     {
+        return static::createRoute($route, $controller, 'POST');
+    }
+
+    static public function createRoute(string $route, array $controller, $method)
+    {
         $routeObj = new static();
-        $routeObj->method = 'POST';
-        $routeObj->routeUri = $route;
+        $routeObj->method = $method;
+        $routeObj->middleware = static::$groupMiddleware;
+
+        if (static::$prefix) {
+            $routeObj->routeUri = '/' . static::$prefix . $route;
+        } else {
+            $routeObj->routeUri = $route;
+        }
+
         $routeObj->controller = $controller;
 
-        return self::$routeList[$routeObj->method . ':' . $route] = $routeObj;
+        return self::$routeList[$routeObj->method . ':' . $routeObj->routeUri] = $routeObj;
+    }
+
+    static public function group(array $params, $groupFunction)
+    {
+        static::$groupMiddleware = $params['middleware'] ?? [];
+        static::$prefix = $params['prefix'];
+        $groupFunction();
+        static::$prefix = null;
+        static::$groupMiddleware = [];
     }
 
     /**
@@ -40,6 +59,13 @@ class Route
     public function name(string $routeName): Route
     {
         $this->name = $routeName;
+
+        return $this;
+    }
+
+    public function middleware(array $classes)
+    {
+        $this->middleware = array_merge($this->middleware, $classes);
 
         return $this;
     }
@@ -58,16 +84,22 @@ class Route
                     $args = []; // Аргументы, которые передаются в контроллер
                     $break = null;
 
-                    foreach ($parts as $key => $part){
-                        if($part[0] == '{'){
+                    foreach ($parts as $key => $part) {
+                        if ($part[0] == '{') {
                             $args[] = App::$route_parts[$key];
-                        }elseif ($part !== App::$route_parts[$key]) {
+                        } elseif ($part !== App::$route_parts[$key]) {
                             $break = true;
                             break;
                         }
                     }
 
-                    if($break) continue;
+                    if ($break) continue;
+
+                    // Run Middleware
+                    foreach ($obj->middleware as $middleware) {
+                        require_once __APP__ . '/Middleware/' . $middleware . '.php';
+                        (new $middleware())->handle();
+                    }
 
                     // т.к. прошло соответствие маршруту, подключаем необходимый контроллер
                     require_once __APP__ . '/Controllers/' . $obj->controller[0] . '.php';
