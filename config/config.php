@@ -6,7 +6,8 @@
 return [
     'app' => [
         'debug' => true,
-        'lang' => 'en'
+        'lang' => 'ru',
+        'languages' => ['ru', 'en']
     ],
 
     'database' => [

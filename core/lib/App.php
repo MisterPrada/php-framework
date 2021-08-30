@@ -9,7 +9,7 @@ class App
 
     protected function __construct() {
         static::$route_url = explode("?", $_SERVER['REQUEST_URI'])[0];
-        static::$route_parts = array_filter(explode('/', static::$route_url));
+        static::$route_parts = array_values(array_filter(explode('/', static::$route_url)));
     }
 
     protected function __clone() { }
@@ -29,3 +29,5 @@ class App
         return self::$instances[$cls];
     }
 }
+
+App::getInstance();

@@ -1,11 +1,21 @@
 <?php
 
 
-class Main
+class Main extends Controller
 {
+    public function home()
+    {
+        echo config('app.lang');
+    }
+
     public function index($id)
     {
-        echo 'Успешно запущенный контроллер ' . $id;
+        echo "test";
+    }
+
+    public function lang()
+    {
+        echo '<a href="https://framework/setlang/en" target="_blank">link</a>' . config('app.lang');
     }
 
     public function secret($id)

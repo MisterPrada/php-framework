@@ -15,3 +15,5 @@ class Connection
     }
 
 }
+
+Connection::make($config);

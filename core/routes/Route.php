@@ -32,7 +32,7 @@ class Route
         $routeObj->middleware = static::$groupMiddleware;
 
         if (static::$prefix) {
-            $routeObj->routeUri = '/' . static::$prefix . $route;
+            $routeObj->routeUri = static::$prefix . $route;
         } else {
             $routeObj->routeUri = $route;
         }
@@ -45,9 +45,9 @@ class Route
     static public function group(array $params, $groupFunction)
     {
         static::$groupMiddleware = $params['middleware'] ?? [];
-        static::$prefix = $params['prefix'];
+        static::$prefix .= '/'.$params['prefix'];
         $groupFunction();
-        static::$prefix = null;
+        static::$prefix = str_replace('/'. $params['prefix'], "", static::$prefix);
         static::$groupMiddleware = [];
     }
 
@@ -78,7 +78,8 @@ class Route
             $route = $method_route[1];
 
             if ($method == $_SERVER['REQUEST_METHOD']) {
-                $parts = array_filter(explode('/', $route));
+                $parts = array_values(array_filter(explode('/', $route)));
+
 
                 if (count($parts) == count(App::$route_parts)) {
                     $args = []; // Аргументы, которые передаются в контроллер
@@ -93,13 +94,20 @@ class Route
                         }
                     }
 
+
+
                     if ($break) continue;
+
+
+
 
                     // Run Middleware
                     foreach ($obj->middleware as $middleware) {
                         require_once __APP__ . '/Middleware/' . $middleware . '.php';
                         (new $middleware())->handle();
                     }
+
+
 
                     // т.к. прошло соответствие маршруту, подключаем необходимый контроллер
                     require_once __APP__ . '/Controllers/' . $obj->controller[0] . '.php';

@@ -1,9 +1,22 @@
 <?php
+require_once __APP__ . '/Middleware/Lang.php';
+Lang::handle();
 
 
-Route::group(['prefix' => 'en'], function (){
-    Route::get('/blog/user/{id}', ['Main', 'index'])->name('user');
+Route::get('/', ['LanguageController', 'setHomeLang']);
+
+//Route::get('/rester/{id}', ['Main', 'index']);
+
+Route::get('/setlang/{language}', ['LanguageController', 'setLang'])->name('lang');
+
+
+Route::group(['prefix' => Lang::getLang()], function (){
+    Route::get('', ['Main', 'home'])->name('home');
+    Route::get('/blog/user/{id}', ['Main', 'home'])->name('user');
 });
+
+
+
 
 
 /*Route::get('/blog/user/{id}', ['Main', 'index'])->name('user');
