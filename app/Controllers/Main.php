@@ -5,7 +5,7 @@ class Main extends Controller
 {
     public function home()
     {
-        echo config('app.lang');
+        
     }
 
     public function index($id)
@@ -28,5 +28,9 @@ class Main extends Controller
         echo 'Категория: ' . $category;
         echo '<br>';
         echo 'Итем: ' . $item;
+    }
+
+    public function notFound(){
+        echo 'NOT FOUND';
     }
 }

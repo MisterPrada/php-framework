@@ -1,5 +1,5 @@
 <?php
-
+require_once __CORE__ . '/lib/Lang.php';
 
 class App
 {
@@ -10,6 +10,7 @@ class App
     protected function __construct() {
         static::$route_url = explode("?", $_SERVER['REQUEST_URI'])[0];
         static::$route_parts = array_values(array_filter(explode('/', static::$route_url)));
+        Lang::setLang();
     }
 
     protected function __clone() { }

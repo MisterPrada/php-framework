@@ -3,7 +3,7 @@
 
 class Lang
 {
-    public static function handle()
+    public static function setLang()
     {
         $languages = config('app.languages');
 

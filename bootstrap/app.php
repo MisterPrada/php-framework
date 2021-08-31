@@ -15,6 +15,7 @@ try {
     // Connecting the required classes
     require_once __CORE__ . 'database/Connection.php';
     require_once __CORE__ . 'lib/App.php';
+    require_once __CORE__ . 'lib/Request.php';
     require_once __CORE__ . '/routes/Route.php';
     require_once __APP__ . '/Controllers/Controller.php';
 

@@ -44,11 +44,23 @@ class Route
 
     static public function group(array $params, $groupFunction)
     {
-        static::$groupMiddleware = $params['middleware'] ?? [];
-        static::$prefix .= '/'.$params['prefix'];
-        $groupFunction();
-        static::$prefix = str_replace('/'. $params['prefix'], "", static::$prefix);
-        static::$groupMiddleware = [];
+        if(isset($params['middleware'])){
+            static::$groupMiddleware = array_merge(static::$groupMiddleware, $params['middleware']);
+        }
+
+        if(isset($params['prefix'])){
+            static::$prefix .= '/'.$params['prefix'];
+        }
+
+        $groupFunction(); //recursive group routs call
+
+        if(isset($params['prefix'])){
+            static::$prefix = str_replace('/'. $params['prefix'], "", static::$prefix);
+        }
+
+        if(isset($params['middleware'])){
+            static::$groupMiddleware = array_diff(static::$groupMiddleware, $params['middleware']);
+        }
     }
 
     /**
@@ -94,20 +106,13 @@ class Route
                         }
                     }
 
-
-
                     if ($break) continue;
-
-
-
 
                     // Run Middleware
                     foreach ($obj->middleware as $middleware) {
                         require_once __APP__ . '/Middleware/' . $middleware . '.php';
                         (new $middleware())->handle();
                     }
-
-
 
                     // т.к. прошло соответствие маршруту, подключаем необходимый контроллер
                     require_once __APP__ . '/Controllers/' . $obj->controller[0] . '.php';
@@ -116,6 +121,10 @@ class Route
                     die();
                 }
             }
+        }
+
+        if(isset(App::$route_parts[0]) && App::$route_parts[0] != '404'){
+            header('Location: /404'); // if not found controller redirect to 404 page
         }
     }
 
