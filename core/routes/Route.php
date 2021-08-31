@@ -106,6 +106,8 @@ class Route
                         }
                     }
 
+                    $args[] = Request::getInstance();
+
                     if ($break) continue;
 
                     // Run Middleware

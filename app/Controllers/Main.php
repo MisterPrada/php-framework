@@ -5,7 +5,12 @@ class Main extends Controller
 {
     public function home()
     {
-        
+
+    }
+
+    public function user(Request $request)
+    {
+        var_dump($request);
     }
 
     public function index($id)
