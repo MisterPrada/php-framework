@@ -9,7 +9,9 @@ Route::get('/setlang/{language}', ['LanguageController', 'setLang'])->name('lang
 
 Route::group(['prefix' => Lang::getLang()], function (){
     Route::get('', ['Main', 'home'])->name('home');
+
     Route::get('/user', ['Main', 'user'])->name('user');
+    Route::post('/user', ['Main', 'user'])->name('user');
 });
 
 

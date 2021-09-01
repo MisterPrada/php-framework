@@ -10,7 +10,7 @@ class Main extends Controller
 
     public function user(Request $request)
     {
-        var_dump($request);
+        echo "blem";
     }
 
     public function index($id)
