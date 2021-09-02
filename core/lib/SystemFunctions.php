@@ -17,7 +17,7 @@ function config($path, $val = null)
 
     if (is_null($val)) {
         return $out;
-    }else{
+    } else {
         // set config
         return $out = $val;
     }
@@ -45,3 +45,16 @@ function route($name, ...$args)
 
     return '/';
 }
+
+// get view template
+function view($__name, $data = [])
+{
+    extract($data);
+
+    if (App::$view_varibles) {
+        extract(App::$view_varibles);
+    }
+
+    require __VIEWS__ . "{$__name}.php";
+}
+

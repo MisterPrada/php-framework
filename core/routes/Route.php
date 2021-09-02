@@ -119,7 +119,7 @@ class Route
                     // т.к. прошло соответствие маршруту, подключаем необходимый контроллер
                     require_once __APP__ . '/Controllers/' . $obj->controller[0] . '.php';
                     $controller = new $obj->controller[0];
-                    $controller->{$obj->controller[1]}(...$args);
+                    echo $controller->{$obj->controller[1]}(...$args);
                     die();
                 }
             }

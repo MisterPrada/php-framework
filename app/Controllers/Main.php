@@ -10,7 +10,9 @@ class Main extends Controller
 
     public function user(Request $request)
     {
-        echo "blem";
+        $name = 'Mister&Prada';
+
+        return view('user', ['name' => $name]);
     }
 
     public function index($id)

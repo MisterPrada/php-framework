@@ -4,6 +4,8 @@ session_start();
 const __ROOT__ = '../';
 const __APP__ = '../app/';
 const __CORE__ = '../core/';
+const __RESOURCES__ = '../resources/';
+const __VIEWS__ = '../resources/views/';
 
 try {
     // Get main config

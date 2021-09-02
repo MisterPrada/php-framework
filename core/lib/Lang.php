@@ -38,9 +38,9 @@ class Lang
 
         //Проверяем метку языка - есть ли она среди доступных языков
         if (!empty($segmentsURI[0]) && in_array($segmentsURI[0],  config('app.languages'))) {
-            return $segmentsURI[0];
+            return App::$view_varibles['lang'] = $segmentsURI[0];
         } else {
-            return config('app.lang');
+            return  App::$view_varibles['lang'] = config('app.lang');
         }
     }
 

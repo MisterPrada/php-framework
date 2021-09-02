@@ -5,6 +5,7 @@ class App
 {
     public static $route_url;
     public static $route_parts;
+    public static $view_varibles = [];
     private static $instances = [];
 
     protected function __construct() {
