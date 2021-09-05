@@ -5,8 +5,7 @@ class Main extends Controller
 {
     public function home()
     {
-        //return __('name');
-        return view('user');
+        return view('pages/home');
     }
 
     public function user($id, Request $request)

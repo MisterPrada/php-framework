@@ -1,3 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea
 /Nginx_1.14_vhost.conf
+/public/css
+/public/js

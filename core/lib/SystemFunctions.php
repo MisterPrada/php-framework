@@ -94,3 +94,4 @@ function __($action, $language = null)
     return Lang::$translate[$lang]['default'][$action] ?? '';
 }
 
+
