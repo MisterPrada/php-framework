@@ -29,9 +29,9 @@ function route($name, ...$args)
     foreach (Route::$routeList as $method_route => $obj) {
         if ($obj->name == $name) {
             $method_route = explode(':', $method_route);
+
             $route = $method_route[1];
             $parts = array_filter(explode('/', $route));
-
 
             foreach ($parts as $key => $part) {
                 if ($part[0] == '{') {
@@ -56,5 +56,41 @@ function view($__name, $data = [])
     }
 
     require __VIEWS__ . "{$__name}.php";
+}
+
+// translate
+function __($action, $language = null)
+{
+    $lang = config('app.lang');
+
+    if(in_array($language, config('app.languages'))){
+        $lang = $language;
+    }
+
+    $parts = explode('.', $action);
+
+    // если больше 1 элемента
+    if(isset($parts[1])){
+        $translateKey = array_pop($parts);
+
+        $parts = implode('/', $parts);
+        $langPath = __RESOURCES__ . "lang/" . $lang . '/' . $parts . '.php';
+
+        if(file_exists($langPath)){
+            if(!Lang::$translate[$lang][$langPath]){
+                Lang::$translate[$lang][$langPath] = require_once $langPath;
+            }
+
+            return Lang::$translate[$lang][$langPath][$translateKey];
+        }
+    }
+
+    // force connect lang if not exists
+    if(!isset(Lang::$translate[$lang]['default'])){
+        Lang::$translate[$lang]['default'] = require_once __RESOURCES__ . "lang/" . $lang . '.php';
+    }
+
+
+    return Lang::$translate[$lang]['default'][$action] ?? '';
 }
 

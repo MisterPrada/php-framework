@@ -9,9 +9,14 @@ Route::get('/setlang/{language}', ['LanguageController', 'setLang'])->name('lang
 
 Route::group(['prefix' => Lang::getLang()], function (){
     Route::get('', ['Main', 'home'])->name('home');
-    Route::get('/user', ['Main', 'user'])->name('user');
-    Route::post('/user', ['Main', 'user'])->name('user');
+    Route::get('/user/{id}', ['Main', 'user'])->name('user');
+    Route::post('/user', ['Main', 'user'])->name('user.post');
 });
+
+
+// where переменная может быть только одна и в конце роута
+//Route::get('/catalog/{name}', ['Main', 'catalog'])->where(['name' => '^[a-zA-Z0-9\/_-]+$']);
+
 
 
 /*Route::get('/blog/user/{id}', ['Main', 'index'])->name('user');

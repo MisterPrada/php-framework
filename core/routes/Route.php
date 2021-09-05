@@ -11,6 +11,7 @@ class Route
     public $routeUri;
     public $method;
     public $middleware = [];
+    public $condition = [];
     static public $groupMiddleware = [];
     static public $prefix;
     static public $routeList = [];
@@ -75,6 +76,12 @@ class Route
         return $this;
     }
 
+    public function where(array $nameRegex){
+        $this->condition = $nameRegex;
+
+        return $this;
+    }
+
     public function middleware(array $classes)
     {
         $this->middleware = array_merge($this->middleware, $classes);
@@ -92,13 +99,28 @@ class Route
             if ($method == $_SERVER['REQUEST_METHOD']) {
                 $parts = array_values(array_filter(explode('/', $route)));
 
-
-                if (count($parts) == count(App::$route_parts)) {
+                // что количество частей совпадает с количеством чаетй роута или есть специфическое условие where
+                if (count($parts) == count(App::$route_parts) || $obj->condition) {
                     $args = []; // Аргументы, которые передаются в контроллер
                     $break = null;
 
                     foreach ($parts as $key => $part) {
                         if ($part[0] == '{') {
+
+                            foreach ($obj->condition as $nameCondition => $condition){
+                                if($part == '{'. $nameCondition . '}'){
+                                    $url = strstr(App::$route_url, App::$route_parts[$key]); // url после переменной включая её
+
+                                    if(preg_match('/'. $condition .'/', $url, $matches)){
+                                        $args[] = $url;
+                                        continue;
+                                    }
+
+                                    $break = true;
+                                    break;
+                                }
+                            }
+
                             $args[] = App::$route_parts[$key];
                         } elseif ($part !== App::$route_parts[$key]) {
                             $break = true;

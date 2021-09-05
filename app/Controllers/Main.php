@@ -5,12 +5,15 @@ class Main extends Controller
 {
     public function home()
     {
-
+        //return __('name');
+        return view('user');
     }
 
-    public function user(Request $request)
+    public function user($id, Request $request)
     {
         $name = 'Mister&Prada';
+
+        echo route('user', 20) . '<br>';
 
         return view('user', ['name' => $name]);
     }
@@ -30,11 +33,9 @@ class Main extends Controller
         echo 'Успешно запущенный СЕКРЕТНЫЙ контроллер ' . $id;
     }
 
-    public function catalog($category, $item)
+    public function catalog($name)
     {
-        echo 'Категория: ' . $category;
-        echo '<br>';
-        echo 'Итем: ' . $item;
+        echo 'catalog + ' . $name;
     }
 
     public function notFound(){

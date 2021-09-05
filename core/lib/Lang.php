@@ -3,6 +3,8 @@
 
 class Lang
 {
+    public static $translate = [];
+
     public static function setLang()
     {
         $languages = config('app.languages');

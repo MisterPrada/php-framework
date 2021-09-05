@@ -12,6 +12,7 @@ class App
         static::$route_url = explode("?", $_SERVER['REQUEST_URI'])[0];
         static::$route_parts = array_values(array_filter(explode('/', static::$route_url)));
         Lang::setLang();
+        Lang::$translate[config('app.lang')]['default'] = require_once __RESOURCES__ . 'lang/' . config('app.lang') . '.php' ;
     }
 
     protected function __clone() { }
