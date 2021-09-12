@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Controllers;
 
 class LanguageController extends Controller
 {

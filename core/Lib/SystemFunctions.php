@@ -1,5 +1,8 @@
 <?php
 
+use Core\Lib\App;
+use Core\Lib\Lang;
+
 // Convenient use of configuration or set config
 function config($path, $val = null)
 {
@@ -94,4 +97,14 @@ function __($action, $language = null)
     return Lang::$translate[$lang]['default'][$action] ?? '';
 }
 
+// Name to 'Name'
+function wrapInQuote($value)
+{
+    return '\'' . $value . '\'';
+}
 
+// Name to `Name`
+function wrapInBackQuote($value)
+{
+    return '`' . $value . '`';
+}

@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Core\Routes;
+
+use Core\Lib\App;
+
 /**
  * Class Route
  * Общий класс служит для регистрации роутов в системе
@@ -97,7 +101,7 @@ class Route
             $route = $method_route[1];
 
             if ($method == $_SERVER['REQUEST_METHOD']) {
-                $parts = array_values(array_filter(explode('/', $route)));
+                 $parts = array_values(array_filter(explode('/', $route)));
 
                 // что количество частей совпадает с количеством чаетй роута или есть специфическое условие where
                 if (count($parts) == count(App::$route_parts) || $obj->condition) {
@@ -128,20 +132,31 @@ class Route
                         }
                     }
 
-                    $args[] = Request::getInstance();
-
                     if ($break) continue;
 
                     // Run Middleware
                     foreach ($obj->middleware as $middleware) {
                         require_once __APP__ . '/Middleware/' . $middleware . '.php';
-                        (new $middleware())->handle();
+                        $middlewareClass = 'App\\Middleware\\' . str_replace("/", "\\", $middleware); // Название контроллера для Namespace
+                        (new $middlewareClass())->handle();
                     }
 
                     // т.к. прошло соответствие маршруту, подключаем необходимый контроллер
                     require_once __APP__ . '/Controllers/' . $obj->controller[0] . '.php';
-                    $controller = new $obj->controller[0];
-                    echo $controller->{$obj->controller[1]}(...$args);
+
+                    $controllerClass = 'App\\Controllers\\' . str_replace("/", "\\", $obj->controller[0]); // Название контроллера для Namespace
+                    $controllerObject = new $controllerClass(); // Создание объекта контроллера
+
+
+                    // Рефлектим параметры вызываемого метода для того чтобы передать объект запрашеваемого класса
+                    $actionArgs = new \ReflectionMethod($controllerClass, $obj->controller[1]);
+                    $param = end($actionArgs->getParameters());
+
+                    if( $param && $param = $param->getClass() ){
+                        $args[] = new $param->name;
+                    }
+
+                    echo $controllerObject->{$obj->controller[1]}(...$args);
                     die();
                 }
             }

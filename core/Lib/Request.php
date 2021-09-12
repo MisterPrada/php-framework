@@ -1,5 +1,6 @@
 <?php
 
+namespace Core\Lib;
 
 class Request
 {
@@ -9,7 +10,7 @@ class Request
     public $content = null;
     public $files;
 
-    protected function __construct()
+    public function __construct()
     {
         $this->headers = getallheaders();
         $this->files = $_FILES;

@@ -1,4 +1,7 @@
 <?php
+
+namespace Core\Lib;
+
 require_once __CORE__ . '/lib/Lang.php';
 
 class App

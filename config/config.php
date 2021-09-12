@@ -17,7 +17,7 @@ return [
         'db_type' => 'mysql',
         'connection' => '192.168.0.166',
         'options' => [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         ]
     ]
 ];

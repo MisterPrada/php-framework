@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Controllers;
+
+use App\Models\User;
+use Core\Lib\Request;
 
 class Main extends Controller
 {
@@ -8,13 +12,14 @@ class Main extends Controller
         return view('pages/home');
     }
 
-    public function user($id, Request $request)
+    public function user(Request $request)
     {
+        require_once __APP__. 'Models/User.php';
+        $user = new User();
+
         $name = 'Mister&Prada';
-
-        echo route('user', 20) . '<br>';
-
-        return view('user', ['name' => $name]);
+        $userName = $user->getById(1)->name;
+        return view('user', ['name' => $name, 'userName' => $userName]);
     }
 
     public function index($id)

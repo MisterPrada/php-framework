@@ -1,5 +1,8 @@
 <?php
 
+use App\Core\Routes\Route;
+use Core\Lib\Lang;
+
 Route::$groupMiddleware = [];
 
 Route::get('/', ['LanguageController', 'setHomeLang']);
@@ -9,9 +12,13 @@ Route::get('/setlang/{language}', ['LanguageController', 'setLang'])->name('lang
 
 Route::group(['prefix' => Lang::getLang()], function (){
     Route::get('', ['Main', 'home'])->name('home');
-    Route::get('/user/{id}', ['Main', 'user'])->name('user');
+
+    Route::get('/user', ['Main', 'user'])->name('user');
     Route::post('/user', ['Main', 'user'])->name('user.post');
 });
+
+
+Route::get('/login', ['Auth/AuthController', 'login'])->name('auth.login');
 
 
 // where переменная может быть только одна и в конце роута

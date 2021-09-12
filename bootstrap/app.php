@@ -12,22 +12,28 @@ try {
     $config = require_once '../config/config.php';
 
     // Libraries
-    require_once __CORE__ . 'lib/SystemFunctions.php';
+    require_once __CORE__ . 'Lib/SystemFunctions.php';
 
     // Connecting the required classes
-    require_once __CORE__ . 'database/Connection.php';
-    require_once __CORE__ . 'lib/App.php';
-    require_once __CORE__ . 'lib/Request.php';
-    require_once __CORE__ . 'routes/Route.php';
+    require_once __CORE__ . 'Database/Db.php';
+    require_once __CORE__ . 'Lib/App.php';
+    require_once __CORE__ . 'Lib/Request.php';
+    require_once __CORE__ . 'Lib/Response.php';
+    require_once __CORE__ . 'Routes/Route.php';
 
     require_once __APP__ . 'Models/Model.php';
     require_once __APP__ . 'Controllers/Controller.php';
+    require_once __APP__ . 'Controllers/Api/ApiController.php';
+
+    require_once __APP__ . 'Kernel.php';
+    require_once __CORE__ . 'Lib/Auth.php';
 
     // Declaring routes
     require_once __ROOT__ . 'routes/api.php';
     require_once __ROOT__ . 'routes/web.php';
 
-    Route::run();
+    \App\Kernel::run();
+    \App\Core\Routes\Route::run();
 
 } catch (Throwable $e) {
     if($config['app']['debug']){

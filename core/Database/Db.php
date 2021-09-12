@@ -1,12 +1,16 @@
 <?php
 
-class Connection
+namespace Core\Database;
+
+use PDO;
+
+class Db
 {
-    public static $instance;
+    public static $connection = [];
 
     public static function make($config, $section = 'database')
     {
-        return self::$instance = new PDO(
+        return self::$connection[] = new PDO(
             $config[$section]['db_type'] . ':host=' . $config[$section]['connection'] . ';dbname=' . $config[$section]['name'],
             $config[$section]['username'],
             $config[$section]['password'],
@@ -16,4 +20,4 @@ class Connection
 
 }
 
-Connection::make($config);
+Db::make($config);

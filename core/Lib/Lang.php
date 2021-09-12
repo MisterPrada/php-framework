@@ -1,5 +1,6 @@
 <?php
 
+namespace Core\Lib;
 
 class Lang
 {
