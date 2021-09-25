@@ -7,51 +7,36 @@ use PDO;
 
 class Model
 {
-    public static $connection;
-
-    protected $table;
-
-    public $schema;
+    public $scheme;
     public $collection;
 
     public function __construct() {}
 
     public function __set($name, $value)
     {
-        if(!$this->schema) { $this->schema = (object)[]; }
+        if(!$this->scheme) { $this->scheme = (object)[]; }
 
-        $camelCaseName = $this->underscoreToCamelCase($name);
-
-        $this->schema->$camelCaseName = $value;
+        $this->scheme->$name = $value;
     }
 
     public function __get($key)
     {
-        if($this->schema->{$key}){
-            return $this->schema->{$key};
+        if($this->scheme->{$key}){
+            return $this->scheme->{$key};
         }
 
         return null;
     }
 
-    public static function setConnection()
-    {
-        self::$connection = Db::$connection[0]; // Set first config connections
-    }
-
-    public function all()
-    {
-        $query = " 
-            SELECT * FROM {$this->table}
-        ";
-
-        return $this->raw($query);
-    }
-
     public function raw($query)
     {
-        $this->collection = self::$connection->query($query, PDO::FETCH_CLASS, static::class)->fetchAll();
+        $this->collection = Db::$connection->query($query, PDO::FETCH_CLASS, static::class)->fetchAll();
         return $this;
+    }
+
+    public function get()
+    {
+        return $this->collection ?? [] ;
     }
 
     public function first()
@@ -63,58 +48,193 @@ class Model
         return null;
     }
 
-    public function find(int $id)
+    public function save()
+    {
+        if($this->id){
+            $scheme = (array)$this->scheme;
+            unset( $scheme['created_at'], $scheme['updated_at'] );
+
+            static::update($scheme, [['id', '=', $this->id]]);
+        }
+
+        return false;
+    }
+
+
+    /** Relations */
+
+    public function belongsTo($class, $foreign_key, $local_key)
+    {
+        $relation_table = $class::table;
+        $table = static::table;
+        $currentId = $this->id;
+
+        $query = "
+            SELECT `{$relation_table}`.* FROM `{$table}`
+            LEFT JOIN `{$relation_table}` ON `{$table}`.`{$local_key}` = `{$relation_table}`.`{$foreign_key}`
+            WHERE `{$table}`.`id` = '{$currentId}'
+            ";
+
+        return (new $class)->raw($query)->first();
+    }
+
+    public function hasMany($class, $foreign_key, $local_key)
+    {
+        $relation_table = $class::table;
+        $table = static::table;
+        $currentId = $this->id;
+
+        $query = "
+            SELECT `{$relation_table}`.* FROM `{$table}`
+            LEFT JOIN `{$relation_table}` ON `{$table}`.`{$local_key}` = `{$relation_table}`.`{$foreign_key}`
+            WHERE `{$table}`.`id` = '{$currentId}'
+            ";
+
+        return (new $class)->raw($query)->get();
+    }
+
+
+    /** Static methods **/
+
+    public static function all()
+    {
+        $query = " 
+            SELECT * FROM ". static::table ."
+        ";
+
+        return (new static)->raw($query);
+    }
+
+    public static function find(int $id)
     {
         $query = "
-            SELECT * FROM {$this->table}
+            SELECT * FROM ". static::table ."
             WHERE id = {$id}
             ";
 
-        return $this->raw($query)->first();
+        return (new static)->raw($query)->first();
     }
 
-    public function where($col, $val)
+    public static function where(array $condition)
     {
+        $where = static::conditionToString($condition);
+
         $query = "
-            SELECT * FROM {$this->table}
-            WHERE {$col} = '{$val}'
+            SELECT * FROM ". static::table ."
+            WHERE {$where}
             ";
 
-        return $this->raw($query);
+        return (new static)->raw($query);
     }
 
-    public function create(array $data)
+    public static function create(array $data)
     {
         $values = [];
 
         foreach ($data as $record){
-
             $values[] = '(' . implode(",", array_map('wrapInQuote' , array_values($record))) . ')';
         }
 
         $columns = implode(",", array_map('wrapInBackQuote', array_keys($data[0])));
         $values = implode(',', $values);
 
+        $table = static::table;
+
         $query = " 
-            INSERT INTO {$this->table} ({$columns})
+            INSERT INTO {$table} ({$columns})
             VALUES {$values}
         ";
 
-        return self::$connection->query($query)->rowCount();
+        return Db::$connection->query($query)->rowCount();
     }
 
-    public function get()
+    public static function update(array $data, array $condition)
     {
-        return $this->collection ?? [] ;
+        $set = static::dataToString($data);
+        $where = static::conditionToString($condition);
+
+        $query = "
+            UPDATE ". static::table ."
+            SET {$set}
+            WHERE {$where}
+        ";
+
+        return Db::$connection->query($query)->rowCount();
     }
 
-    private function underscoreToCamelCase(string $source): string
+    public static function delete(array $condition)
     {
-        return lcfirst(str_replace('_', '', ucwords($source, '_')));
+        $where = static::conditionToString($condition);
+
+        $query = "
+            DELETE FROM ". static::table ."
+            WHERE {$where}
+        ";
+
+        return Db::$connection->query($query)->rowCount();
     }
+
+
+    /** methods without logic **/
+
+    private static function conditionToString($condition){
+        $where = [];
+
+        foreach ($condition as $item) {
+
+            $operator = ' AND ';
+            $item[2] = addslashes($item[2]); //
+
+            switch (count($item)){
+                case 2:
+                    $where[] = wrapInBackQuote($item[0]) . " = " . wrapInQuote($item[1]);
+                    break;
+                case 3:
+                    if(is_array($item[2])){
+                        $item[2] = "(" . implode(',', array_map(function($item) {
+                            return "'{$item}'";
+                        }, $item[2])) . ")";
+
+                        $where[] = wrapInBackQuote($item[0]) . " {$item[1]} " . $item[2];
+                        break;
+                    }
+
+                    $where[] = wrapInBackQuote($item[0]) . " {$item[1]} " . wrapInQuote($item[2]);
+                    break;
+                case 4:
+                    $operator = " {$item[3]} ";
+
+                    if(is_array($item[2])){
+                        $item[2] = "(" . implode(',', array_map(function($item) {
+                                return "'{$item}'";
+                            }, $item[2])) . ")";
+
+                        $where[] = wrapInBackQuote($item[0]) . " {$item[1]} " . $item[2];
+                        break;
+                    }
+
+                    $where[] = wrapInBackQuote($item[0]) . " {$item[1]} " . wrapInQuote($item[2]);
+                    break;
+            }
+
+            $where = [implode($operator, $where)];
+
+        }
+
+        return $where[0];
+    }
+
+    private static function dataToString($data)
+    {
+        foreach ($data as $name => $value){
+            $set[] = wrapInBackQuote($name) . ' = ' . wrapInQuote($value);
+        }
+
+        return implode(',' , $set);
+    }
+
 }
 
-Model::setConnection();
 
 /* Примеры
 

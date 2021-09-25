@@ -94,7 +94,7 @@ function __($action, $language = null)
     }
 
 
-    return Lang::$translate[$lang]['default'][$action] ?? '';
+    return Lang::$translate[$lang]['default'][$action] ?? $action;
 }
 
 // Name to 'Name'
@@ -107,4 +107,16 @@ function wrapInQuote($value)
 function wrapInBackQuote($value)
 {
     return '`' . $value . '`';
+}
+
+// get csrf token
+function csrf()
+{
+    return $_SESSION['csrf_token'];
+}
+
+// create unique token
+function getApiToken()
+{
+    return hash('sha256', uniqid(mt_rand()));
 }

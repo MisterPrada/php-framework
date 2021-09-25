@@ -18,7 +18,7 @@ Route::group(['prefix' => Lang::getLang()], function (){
 });
 
 
-Route::get('/login', ['Auth/AuthController', 'login'])->name('auth.login');
+Route::post('/login', ['Auth/AuthController', 'login'])->name('auth.login');
 
 
 // where переменная может быть только одна и в конце роута

@@ -14,6 +14,7 @@ class App
     protected function __construct() {
         static::$route_url = explode("?", $_SERVER['REQUEST_URI'])[0];
         static::$route_parts = array_values(array_filter(explode('/', static::$route_url)));
+        static::csrfToken();
         Lang::setLang();
         Lang::$translate[config('app.lang')]['default'] = require_once __RESOURCES__ . 'lang/' . config('app.lang') . '.php' ;
     }
@@ -33,6 +34,14 @@ class App
         }
 
         return self::$instances[$cls];
+    }
+
+    /** set CSRF token */
+    public static function csrfToken()
+    {
+        if(!isset($_SESSION['csrf_token'])){
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(35));
+        }
     }
 }
 

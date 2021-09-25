@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use Core\Lib\Lang;
+
 class LanguageController extends Controller
 {
     public function setLang($language){

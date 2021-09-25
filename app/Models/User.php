@@ -2,21 +2,13 @@
 
 namespace App\Models;
 
-use PDO;
-
 class User extends Model
 {
-    protected $table = 'users';
+    public const table = 'users';
 
-/*    public function roles()
+    public function role()
     {
-        $query = "
-            SELECT * FROM {$this->table} 
-            LEFT JOIN roles ON users.`role_id` = roles.`id` 
-            ";
-
-        return self::$connection->query($query)->fetch;
-    }*/
-
+        return $this->belongsTo(Role::class, 'id', 'role_id');
+    }
 
 }

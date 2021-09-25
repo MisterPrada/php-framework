@@ -21,6 +21,8 @@ class Request
         $this->content = file_get_contents('php://input');
 
         $this->body = array_merge($this->body, (array)json_decode($this->content));
+
+        $this->rules(); // call rules if used custom request class
     }
 
     protected function __clone()
@@ -30,6 +32,15 @@ class Request
     public function __wakeup()
     {
         throw new \Exception("Cannot unserialize a singleton.");
+    }
+
+    public function __get($key)
+    {
+        if($this->body[$key]){
+            return $this->body[$key];
+        }
+
+        return null;
     }
 
     public static function getInstance(): Request
@@ -65,6 +76,11 @@ class Request
     public function hasFile($name)
     {
         return isset($this->files[$name]);
+    }
+
+    public function rules()
+    {
+        return [];
     }
 }
 

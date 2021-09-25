@@ -43,6 +43,7 @@ class Main extends Controller
     }
 
     public function notFound(){
+        http_response_code(404);
         echo 'NOT FOUND';
     }
 }

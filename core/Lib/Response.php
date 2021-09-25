@@ -10,4 +10,9 @@ class Response
         http_response_code($code);
         return json_encode($data);
     }
+
+    public static function errors(array $data, $code = 400)
+    {
+        return static::json($data, $code);
+    }
 }
