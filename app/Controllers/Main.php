@@ -46,4 +46,8 @@ class Main extends Controller
         http_response_code(404);
         echo 'NOT FOUND';
     }
+
+    public function translateTest(){
+        echo __('name', ['name' => "Jon", 'firstname' => 'Carter']);
+    }
 }

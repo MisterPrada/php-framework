@@ -62,39 +62,61 @@ function view($__name, $data = [])
 }
 
 // translate
-function __($action, $language = null)
+function __($action, array $params = [], $language = null)
 {
     $lang = config('app.lang');
 
-    if(in_array($language, config('app.languages'))){
+    if (in_array($language, config('app.languages'))) {
         $lang = $language;
     }
 
     $parts = explode('.', $action);
 
     // если больше 1 элемента
-    if(isset($parts[1])){
+    if (isset($parts[1])) {
         $translateKey = array_pop($parts);
 
         $parts = implode('/', $parts);
         $langPath = __RESOURCES__ . "lang/" . $lang . '/' . $parts . '.php';
 
-        if(file_exists($langPath)){
-            if(!Lang::$translate[$lang][$langPath]){
+        if (file_exists($langPath)) {
+            if (!Lang::$translate[$lang][$langPath]) {
                 Lang::$translate[$lang][$langPath] = require_once $langPath;
             }
 
-            return Lang::$translate[$lang][$langPath][$translateKey];
+            $str = Lang::$translate[$lang][$langPath][$translateKey];
+
+            if ($params && $str) {
+                return setParams(Lang::$translate[$lang]['default'][$action], $params);
+            }
+
+            return $str ?? $action;
         }
     }
 
     // force connect lang if not exists
-    if(!isset(Lang::$translate[$lang]['default'])){
+    if (!isset(Lang::$translate[$lang]['default'])) {
         Lang::$translate[$lang]['default'] = require_once __RESOURCES__ . "lang/" . $lang . '.php';
     }
 
+    $str = Lang::$translate[$lang]['default'][$action];
 
-    return Lang::$translate[$lang]['default'][$action] ?? $action;
+    if ($params && $str) {
+        return setParams($str, $params);
+    }
+
+    return $str ?? $action;
+}
+
+function setParams($str, $params)
+{
+    $array = [];
+
+    foreach ($params as $key => $param) {
+        $array[':' . $key] = $param;
+    }
+
+    return str_replace(array_keys($array), $array, $str);
 }
 
 // Name to 'Name'
