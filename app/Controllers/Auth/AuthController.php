@@ -28,6 +28,14 @@ class AuthController
 //            ]
 //        ]);
 
+//        $users = User::create([
+//            [
+//                'name' => 'Test4',
+//                'email' => 'testtrhewwed@gmail.com',
+//                'password' => password_hash('456', PASSWORD_DEFAULT)
+//            ]
+//        ]);
+
         //var_dump(addslashes('lesha.skorpion@gmail.com\'select * from users'));
         //die();
 

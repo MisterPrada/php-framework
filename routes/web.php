@@ -22,6 +22,9 @@ Route::group(['prefix' => Lang::getLang()], function (){
 
 
 
+Route::get('/observer', ['Main', 'observer'])->name('main.observer');
+
+
 Route::post('/login', ['Auth/AuthController', 'login'])->name('auth.login');
 
 

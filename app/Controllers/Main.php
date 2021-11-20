@@ -42,6 +42,34 @@ class Main extends Controller
         echo 'catalog + ' . $name;
     }
 
+    public function observer()
+    {
+
+//        $user = User::update(['name' => 'God DyLad'], [
+//            ['id', '=', '67']
+//        ]);
+
+        $users = User::create([
+            [
+                'name' => 'Test4',
+                'email' => 'testtrhewwed@gmail.com',
+                'password' => password_hash('456', PASSWORD_DEFAULT)
+            ]
+        ]);
+
+//        $user = User::find(67);
+//
+//        var_dump($user); die();
+
+//        $user->name = 'best Friend timo asd';
+//        $user->save();
+
+        var_dump('Main End');
+        die();
+
+        var_dump($user);
+    }
+
     public function notFound(){
         http_response_code(404);
         echo 'NOT FOUND';

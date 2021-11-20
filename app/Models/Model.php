@@ -3,25 +3,36 @@
 namespace App\Models;
 
 use Core\Database\Db;
+use Core\Lib\Observer;
 use PDO;
 
 class Model
 {
+    use Observer;
+
     public $scheme;
     public $collection;
+    private static $observerClasses = [];
 
-    public function __construct() {}
+    public function __construct()
+    {
+        foreach ($this::$observerClasses as $observerClass) {
+            $this->attach(new $observerClass());
+        }
+    }
 
     public function __set($name, $value)
     {
-        if(!$this->scheme) { $this->scheme = (object)[]; }
+        if (!$this->scheme) {
+            $this->scheme = (object)[];
+        }
 
         $this->scheme->$name = $value;
     }
 
     public function __get($key)
     {
-        if($this->scheme->{$key}){
+        if ($this->scheme->{$key}) {
             return $this->scheme->{$key};
         }
 
@@ -36,12 +47,12 @@ class Model
 
     public function get()
     {
-        return $this->collection ?? [] ;
+        return $this->collection ?? [];
     }
 
     public function first()
     {
-        if($this->collection){
+        if ($this->collection) {
             return $this->collection[0];
         }
 
@@ -50,11 +61,20 @@ class Model
 
     public function save()
     {
-        if($this->id){
+        if ($this->id) {
             $scheme = (array)$this->scheme;
-            unset( $scheme['created_at'], $scheme['updated_at'] );
+            unset($scheme['created_at'], $scheme['updated_at']);
 
             static::update($scheme, [['id', '=', $this->id]]);
+        }
+
+        return false;
+    }
+
+    public function remove()
+    {
+        if ($this->id) {
+            static::delete([['id', '=', $this->id]]);
         }
 
         return false;
@@ -99,7 +119,7 @@ class Model
     public static function all()
     {
         $query = " 
-            SELECT * FROM ". static::table ."
+            SELECT * FROM " . static::table . "
         ";
 
         return (new static)->raw($query);
@@ -108,7 +128,7 @@ class Model
     public static function find(int $id)
     {
         $query = "
-            SELECT * FROM ". static::table ."
+            SELECT * FROM " . static::table . "
             WHERE id = {$id}
             ";
 
@@ -120,7 +140,7 @@ class Model
         $where = static::conditionToString($condition);
 
         $query = "
-            SELECT * FROM ". static::table ."
+            SELECT * FROM " . static::table . "
             WHERE {$where}
             ";
 
@@ -131,8 +151,8 @@ class Model
     {
         $values = [];
 
-        foreach ($data as $record){
-            $values[] = '(' . implode(",", array_map('wrapInQuote' , array_values($record))) . ')';
+        foreach ($data as $record) {
+            $values[] = '(' . implode(",", array_map('wrapInQuote', array_values($record))) . ')';
         }
 
         $columns = implode(",", array_map('wrapInBackQuote', array_keys($data[0])));
@@ -145,7 +165,13 @@ class Model
             VALUES {$values}
         ";
 
-        return Db::$connection->query($query)->rowCount();
+        $rowCount = Db::$connection->query($query)->rowCount();
+
+        if ($rowCount > 0) {
+            (new static)->notify('create', $data); // emit observer event
+        }
+
+        return $rowCount;
     }
 
     public static function update(array $data, array $condition)
@@ -154,12 +180,18 @@ class Model
         $where = static::conditionToString($condition);
 
         $query = "
-            UPDATE ". static::table ."
+            UPDATE " . static::table . "
             SET {$set}
             WHERE {$where}
         ";
 
-        return Db::$connection->query($query)->rowCount();
+        $rowCount = Db::$connection->query($query)->rowCount();
+
+        if ($rowCount > 0) {
+            (new static)->notify('update', $data); // emit observer event
+        }
+
+        return $rowCount;
     }
 
     public static function delete(array $condition)
@@ -167,17 +199,24 @@ class Model
         $where = static::conditionToString($condition);
 
         $query = "
-            DELETE FROM ". static::table ."
+            DELETE FROM " . static::table . "
             WHERE {$where}
         ";
 
-        return Db::$connection->query($query)->rowCount();
+        $rowCount = Db::$connection->query($query)->rowCount();
+
+        if ($rowCount > 0) {
+            (new static)->notify('delete', $condition); // emit observer event
+        }
+
+        return $rowCount;
     }
 
 
     /** methods without logic **/
 
-    private static function conditionToString($condition){
+    private static function conditionToString($condition)
+    {
         $where = [];
 
         foreach ($condition as $item) {
@@ -185,15 +224,15 @@ class Model
             $operator = ' AND ';
             $item[2] = addslashes($item[2]); //
 
-            switch (count($item)){
+            switch (count($item)) {
                 case 2:
                     $where[] = wrapInBackQuote($item[0]) . " = " . wrapInQuote($item[1]);
                     break;
                 case 3:
-                    if(is_array($item[2])){
-                        $item[2] = "(" . implode(',', array_map(function($item) {
-                            return "'{$item}'";
-                        }, $item[2])) . ")";
+                    if (is_array($item[2])) {
+                        $item[2] = "(" . implode(',', array_map(function ($item) {
+                                return "'{$item}'";
+                            }, $item[2])) . ")";
 
                         $where[] = wrapInBackQuote($item[0]) . " {$item[1]} " . $item[2];
                         break;
@@ -204,8 +243,8 @@ class Model
                 case 4:
                     $operator = " {$item[3]} ";
 
-                    if(is_array($item[2])){
-                        $item[2] = "(" . implode(',', array_map(function($item) {
+                    if (is_array($item[2])) {
+                        $item[2] = "(" . implode(',', array_map(function ($item) {
                                 return "'{$item}'";
                             }, $item[2])) . ")";
 
@@ -226,12 +265,13 @@ class Model
 
     private static function dataToString($data)
     {
-        foreach ($data as $name => $value){
+        foreach ($data as $name => $value) {
             $set[] = wrapInBackQuote($name) . ' = ' . wrapInQuote($value);
         }
 
-        return implode(',' , $set);
+        return implode(',', $set);
     }
+
 
 }
 

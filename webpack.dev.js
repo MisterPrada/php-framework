@@ -1,7 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin"); // copy style files in public path
 const { VueLoaderPlugin } = require('vue-loader');
-const webpack = require('webpack')
+const webpack = require('webpack');
 
 module.exports = {
     entry: {

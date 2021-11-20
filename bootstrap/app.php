@@ -19,6 +19,7 @@ try {
     require_once __CORE__ . 'Lib/App.php';
     require_once __CORE__ . 'Lib/Request.php';
     require_once __CORE__ . 'Lib/Response.php';
+    require_once __CORE__ . 'Lib/Observer.php';
     require_once __CORE__ . 'Routes/Route.php';
 
     require_once __APP__ . 'Models/Model.php';
