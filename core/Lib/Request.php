@@ -2,10 +2,11 @@
 
 namespace Core\Lib;
 
+/** Global request state | Pattern singleton*/
 class Request
 {
     private static $instances = [];
-    public $headers;
+    public $headers; // All headers
     public $body = [];
     public $content = null;
     public $files;
@@ -22,7 +23,7 @@ class Request
 
         $this->body = array_merge($this->body, (array)json_decode($this->content));
 
-        $this->rules(); // call rules if used custom request class
+        $this->rules(); // Call rules if used custom request class
     }
 
     protected function __clone()

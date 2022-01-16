@@ -32,7 +32,7 @@ class Auth
             self::$instances[$cls] = new static();
         }
 
-        if($_SESSION['auth'])
+        if(isset($_SESSION['auth']))
         {
             static::$authorize = true;
             static::$user = User::find($_SESSION['auth']);

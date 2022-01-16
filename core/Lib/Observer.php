@@ -2,15 +2,14 @@
 
 namespace Core\Lib;
 
+/** Observer pattern for class controller */
 trait Observer
 {
     private $observers = [];
 
     public function __construct()
     {
-        // Специальная группа событий для наблюдателей, которые хотят слушать
-        // Special group events for
-        // все события.
+        // Dedicated event group for observers who want to listen
         $this->observers["*"] = [];
     }
 

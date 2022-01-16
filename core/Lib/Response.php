@@ -2,6 +2,7 @@
 
 namespace Core\Lib;
 
+/** Response constructor */
 class Response
 {
     public static function json(array $data, $code = 200)

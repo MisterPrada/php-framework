@@ -10,8 +10,8 @@ class Lang
     {
         $languages = config('app.languages');
 
-        $raw_locale = $_SESSION['Locale'];
-        $cookie_locale = $_COOKIE['Locale'];
+        $raw_locale = $_SESSION['Locale'] ?? config('app.lang');
+        $cookie_locale = $_COOKIE['Locale'] ?? config('app.lang');
 
 
         if (in_array($raw_locale, $languages)) {

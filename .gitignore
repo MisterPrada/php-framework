@@ -3,3 +3,5 @@
 /Nginx_1.14_vhost.conf
 /public/css
 /public/js
+/public/storage
+/node_modules

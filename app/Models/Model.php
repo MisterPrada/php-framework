@@ -6,16 +6,18 @@ use Core\Database\Db;
 use Core\Lib\Observer;
 use PDO;
 
+/** Model for a single table in a database */
 class Model
 {
     use Observer;
 
     public $scheme;
     public $collection;
-    private static $observerClasses = [];
+    private static $observerClasses = []; // All observer classes for the current model
 
     public function __construct()
     {
+        // Attach all observers for the current model
         foreach ($this::$observerClasses as $observerClass) {
             $this->attach(new $observerClass());
         }
@@ -39,6 +41,7 @@ class Model
         return null;
     }
 
+    /** Custom raw sql query string */
     public function raw($query)
     {
         $this->collection = Db::$connection->query($query, PDO::FETCH_CLASS, static::class)->fetchAll();
@@ -50,6 +53,7 @@ class Model
         return $this->collection ?? [];
     }
 
+    /** Get the first row from the collection */
     public function first()
     {
         if ($this->collection) {
@@ -59,6 +63,7 @@ class Model
         return null;
     }
 
+    /** Save active record */
     public function save()
     {
         if ($this->id) {
@@ -71,6 +76,7 @@ class Model
         return false;
     }
 
+    /** Remove active record */
     public function remove()
     {
         if ($this->id) {
@@ -116,6 +122,7 @@ class Model
 
     /** Static methods **/
 
+    /** Get all rows from model */
     public static function all()
     {
         $query = " 
@@ -125,6 +132,7 @@ class Model
         return (new static)->raw($query);
     }
 
+    /** Find by id row form model */
     public static function find(int $id)
     {
         $query = "
@@ -135,6 +143,7 @@ class Model
         return (new static)->raw($query)->first();
     }
 
+    /** Condition on active record */
     public static function where(array $condition)
     {
         $where = static::conditionToString($condition);
@@ -147,6 +156,7 @@ class Model
         return (new static)->raw($query);
     }
 
+    /** Create record in database */
     public static function create(array $data)
     {
         $values = [];
@@ -174,6 +184,7 @@ class Model
         return $rowCount;
     }
 
+    /** Update records with conditions */
     public static function update(array $data, array $condition)
     {
         $set = static::dataToString($data);
@@ -194,6 +205,7 @@ class Model
         return $rowCount;
     }
 
+    /** Delete records with conditions */
     public static function delete(array $condition)
     {
         $where = static::conditionToString($condition);
@@ -215,6 +227,7 @@ class Model
 
     /** methods without logic **/
 
+    /** Turns a condition into a sql string */
     private static function conditionToString($condition)
     {
         $where = [];
@@ -263,6 +276,7 @@ class Model
         return $where[0];
     }
 
+    /** Turns a data into a sql string */
     private static function dataToString($data)
     {
         foreach ($data as $name => $value) {

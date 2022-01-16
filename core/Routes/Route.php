@@ -6,7 +6,7 @@ use Core\Lib\App;
 
 /**
  * Class Route
- * Общий класс служит для регистрации роутов в системе
+ * The general class is used to register routes in the system
  */
 class Route
 {
@@ -20,16 +20,19 @@ class Route
     static public $prefix;
     static public $routeList = [];
 
+    /** Create GET route */
     static public function get(string $route, array $controller): Route
     {
         return static::createRoute($route, $controller, 'GET');
     }
 
+    /** Create POST route */
     static public function post(string $route, array $controller): Route
     {
         return static::createRoute($route, $controller, 'POST');
     }
 
+    /** Create Route */
     static public function createRoute(string $route, array $controller, $method)
     {
         $routeObj = new static();
@@ -47,6 +50,7 @@ class Route
         return self::$routeList[$routeObj->method . ':' . $routeObj->routeUri] = $routeObj;
     }
 
+    /** Combine routes into a group */
     static public function group(array $params, $groupFunction)
     {
         if(isset($params['middleware'])){
@@ -68,11 +72,7 @@ class Route
         }
     }
 
-    /**
-     * @param string $routeName
-     * @return Route
-     * Устанавливаем имя роуту для последующего обращения к нему
-     */
+    /** Set name route */
     public function name(string $routeName): Route
     {
         $this->name = $routeName;
@@ -80,12 +80,17 @@ class Route
         return $this;
     }
 
+    /**
+     * There can be only one variable and at the end of the route
+     * Route variable regexp condition
+     */
     public function where(array $nameRegex){
         $this->condition = $nameRegex;
 
         return $this;
     }
 
+    /** Set middleware classes on route */
     public function middleware(array $classes)
     {
         $this->middleware = array_merge($this->middleware, $classes);
@@ -93,6 +98,7 @@ class Route
         return $this;
     }
 
+    /** Run all (web + api) routes */
     static public function run()
     {
         foreach (static::$routeList as $method_route => $obj) {
@@ -100,12 +106,12 @@ class Route
             $method = $method_route[0];
             $route = $method_route[1];
 
-            if ($method == $_SERVER['REQUEST_METHOD']) {
+            if (isset($_SERVER['REQUEST_METHOD']) && $method == $_SERVER['REQUEST_METHOD']) {
                  $parts = array_values(array_filter(explode('/', $route)));
 
-                // что количество частей совпадает с количеством чаетй роута или есть специфическое условие where
+                // The number of parts must match the number of parts of the route or there is a specific where clause
                 if (count($parts) == count(App::$route_parts) || $obj->condition) {
-                    $args = []; // Аргументы, которые передаются в контроллер
+                    $args = []; // Arguments that are passed to the controller
                     $break = null;
 
                     foreach ($parts as $key => $part) {
@@ -113,7 +119,7 @@ class Route
 
                             foreach ($obj->condition as $nameCondition => $condition){
                                 if($part == '{'. $nameCondition . '}'){
-                                    $url = strstr(App::$route_url, App::$route_parts[$key]); // url после переменной включая её
+                                    $url = strstr(App::$route_url, App::$route_parts[$key]); // Url after the variable including it
 
                                     if(preg_match('/'. $condition .'/', $url, $matches)){
                                         $args[] = $url;
@@ -137,18 +143,18 @@ class Route
                     // Run Middleware
                     foreach ($obj->middleware as $middleware) {
                         require_once __APP__ . '/Middleware/' . $middleware . '.php';
-                        $middlewareClass = 'App\\Middleware\\' . str_replace("/", "\\", $middleware); // Название контроллера для Namespace
+                        $middlewareClass = 'App\\Middleware\\' . str_replace("/", "\\", $middleware); // Controller name for Namespace
                         (new $middlewareClass())->handle();
                     }
 
-                    // т.к. прошло соответствие маршруту, подключаем необходимый контроллер
+                    // Since the route matches, we connect the required controller
                     require_once __APP__ . '/Controllers/' . $obj->controller[0] . '.php';
 
-                    $controllerClass = 'App\\Controllers\\' . str_replace("/", "\\", $obj->controller[0]); // Название контроллера для Namespace
+                    $controllerClass = 'App\\Controllers\\' . str_replace("/", "\\", $obj->controller[0]); // Controller name for Namespace
                     $controllerObject = new $controllerClass(); // Создание объекта контроллера
 
 
-                    // Рефлектим параметры вызываемого метода для того чтобы передать объект запрашеваемого класса
+                    // Reflect the parameters of the called method in order to pass the object of the requested class
                     $actionArgs = new \ReflectionMethod($controllerClass, $obj->controller[1]);
                     $param = end($actionArgs->getParameters());
 

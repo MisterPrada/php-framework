@@ -3,7 +3,7 @@
 use Core\Lib\App;
 use Core\Lib\Lang;
 
-// Convenient use of configuration or set config
+/** Convenient use of configuration or set config */
 function config($path, $val = null)
 {
     global $config;
@@ -26,7 +26,7 @@ function config($path, $val = null)
     }
 }
 
-// get link by route name
+/** get link by route name */
 function route($name, ...$args)
 {
     foreach (Route::$routeList as $method_route => $obj) {
@@ -49,7 +49,7 @@ function route($name, ...$args)
     return '/';
 }
 
-// get view template
+/** get view template */
 function view($__name, $data = [])
 {
     extract($data);
@@ -61,7 +61,7 @@ function view($__name, $data = [])
     require __VIEWS__ . "{$__name}.php";
 }
 
-// translate
+/** translate */
 function __($action, array $params = [], $language = null)
 {
     $lang = config('app.lang');
@@ -108,6 +108,7 @@ function __($action, array $params = [], $language = null)
     return $str ?? $action;
 }
 
+/** Set Params on translate string */
 function setParams($str, $params)
 {
     $array = [];
@@ -119,25 +120,25 @@ function setParams($str, $params)
     return str_replace(array_keys($array), $array, $str);
 }
 
-// Name to 'Name'
+/** Name to 'Name' */
 function wrapInQuote($value)
 {
     return '\'' . $value . '\'';
 }
 
-// Name to `Name`
+/** Name to `Name` */
 function wrapInBackQuote($value)
 {
     return '`' . $value . '`';
 }
 
-// get csrf token
+/** get csrf token */
 function csrf()
 {
     return $_SESSION['csrf_token'];
 }
 
-// create unique token
+/** create unique token */
 function getApiToken()
 {
     return hash('sha256', uniqid(mt_rand()));

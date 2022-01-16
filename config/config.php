@@ -1,6 +1,6 @@
 <?php
 /*
- * Server configuration
+ * Server App configuration
  */
 
 return [

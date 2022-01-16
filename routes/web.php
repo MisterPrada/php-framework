@@ -7,19 +7,18 @@ Route::$groupMiddleware = [];
 
 Route::get('/', ['LanguageController', 'setHomeLang']);
 Route::get('/404', ['Main', 'notFound']);
+Route::get('/storage-page', ['StorageController', 'index']);
 
 Route::get('/setlang/{language}', ['LanguageController', 'setLang'])->name('lang');
 
 Route::group(['prefix' => Lang::getLang()], function (){
     Route::get('', ['Main', 'home'])->name('home');
 
-
     Route::get('/translate', ['Main', 'translateTest'])->name('translateTest');
 
     Route::get('/user', ['Main', 'user'])->name('user');
     Route::post('/user', ['Main', 'user'])->name('user.post');
 });
-
 
 
 Route::get('/observer', ['Main', 'observer'])->name('main.observer');

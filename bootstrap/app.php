@@ -1,29 +1,33 @@
 <?php
 
 session_start();
-const __ROOT__ = '../';
-const __APP__ = '../app/';
-const __CORE__ = '../core/';
-const __RESOURCES__ = '../resources/';
-const __VIEWS__ = '../resources/views/';
+
+/** Dir constants  */
+define('__ROOT__', dirname(__FILE__) . '/../');
+define('__APP__', __ROOT__ . 'app/');
+define('__CORE__', __ROOT__ . 'core/');
+define('__RESOURCES__', __ROOT__ . 'resources/');
+define('__VIEWS__', __ROOT__ . 'resources/views/');
+define('__STORAGE__', __ROOT__ . 'storage/');
 
 try {
     // Get main config
-    $config = require_once '../config/config.php';
+    $config = require_once __ROOT__ . '/config/config.php';
 
     // Libraries
     require_once __CORE__ . 'Lib/SystemFunctions.php';
 
     // Connecting the required classes
-    require_once __CORE__ . 'Database/Db.php';
-    require_once __CORE__ . 'Lib/App.php';
-    require_once __CORE__ . 'Lib/Request.php';
-    require_once __CORE__ . 'Lib/Response.php';
-    require_once __CORE__ . 'Lib/Observer.php';
-    require_once __CORE__ . 'Routes/Route.php';
+    require_once __CORE__ . 'Database/Db.php'; // Database connection
+    require_once __CORE__ . 'Lib/App.php'; // Main App class
+    require_once __CORE__ . 'Lib/Request.php'; // Global request state
+    require_once __CORE__ . 'Lib/Response.php'; // Response constructor
+    require_once __CORE__ . 'Lib/Observer.php'; // Observer pattern for class controller
+    require_once __CORE__ . 'Routes/Route.php'; // The general class is used to register routes in the system
+    require_once __CORE__ . 'Lib/FileSystem/Storage.php'; // Storage system
 
-    require_once __APP__ . 'Models/Model.php';
-    require_once __APP__ . 'Controllers/Controller.php';
+    require_once __APP__ . 'Models/Model.php'; // Model for a single table in a database
+    require_once __APP__ . 'Controllers/Controller.php'; //
     require_once __APP__ . 'Controllers/Api/ApiController.php';
 
     require_once __APP__ . 'Kernel.php';
@@ -37,9 +41,11 @@ try {
     \App\Core\Routes\Route::run();
 
 } catch (Throwable $e) {
-    if($config['app']['debug']){
+    /** Catch all errors */
+
+    if ($config['app']['debug']) {
         var_dump($e);
-    }else{
+    } else {
         echo "Error";
     }
 }

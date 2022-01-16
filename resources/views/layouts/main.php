@@ -1,3 +1,10 @@
+<?php
+/**
+ * @var string $lang
+ * @var string $content
+ * @var string $scripts
+ */
+?>
 <!doctype html>
 <html lang="<?= $lang ?>">
 <head>

@@ -49,13 +49,13 @@ class Main extends Controller
 //            ['id', '=', '67']
 //        ]);
 
-        $users = User::create([
-            [
-                'name' => 'Test4',
-                'email' => 'testtrhewwed@gmail.com',
-                'password' => password_hash('456', PASSWORD_DEFAULT)
-            ]
-        ]);
+//        $users = User::create([
+//            [
+//                'name' => 'Test4',
+//                'email' => 'testtrhewwed@gmail.com',
+//                'password' => password_hash('456', PASSWORD_DEFAULT)
+//            ]
+//        ]);
 
 //        $user = User::find(67);
 //
@@ -64,10 +64,6 @@ class Main extends Controller
 //        $user->name = 'best Friend timo asd';
 //        $user->save();
 
-        var_dump('Main End');
-        die();
-
-        var_dump($user);
     }
 
     public function notFound(){
