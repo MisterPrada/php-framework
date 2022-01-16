@@ -15,7 +15,7 @@ return [
         'username' => 'root',
         'password' => '',
         'db_type' => 'mysql',
-        'connection' => '192.168.0.166',
+        'connection' => '127.0.0.1',
         'options' => [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         ]

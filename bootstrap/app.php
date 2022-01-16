@@ -37,6 +37,8 @@ try {
     require_once __ROOT__ . 'routes/api.php';
     require_once __ROOT__ . 'routes/web.php';
 
+    require_once __ROOT__ . 'extensions/DynamicFields/include.php';
+
     \App\Kernel::run();
     \App\Core\Routes\Route::run();
 
