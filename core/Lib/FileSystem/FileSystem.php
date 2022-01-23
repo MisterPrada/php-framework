@@ -16,7 +16,17 @@ abstract class FileSystem
     /**
      * Get File
      */
-    abstract public function get($fileName);
+    abstract public function getFile($fileName);
+
+    /**
+     * Put file in storage
+     */
+    abstract public function putFile($fileName, $fileContent);
+
+    /**
+     * Removing file
+     */
+    abstract public function removeFile($fileName);
 
     abstract public function disk($name);
 

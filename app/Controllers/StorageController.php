@@ -8,9 +8,13 @@ class StorageController extends Controller
 {
     public function index(){
 
-        var_dump( Storage::disk('app/public/')->get('info.txt') );
+        $file = Storage::disk('app/public')->getFile('info.txt');
 
-        var_dump( Storage::get('package.json') );
+        //Storage::disk('app/public/media')->putFile('test.txt', $file->content);
+
+        //Storage::disk('app/public/')->removeFile('test.txt');
+
+        var_dump( $file->dirPath );
 
         //return Storage::connector();
     }

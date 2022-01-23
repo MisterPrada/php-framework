@@ -5,6 +5,7 @@ namespace Core\Lib\FileSystem;
 
 require_once __CORE__ . '/Lib/FileSystem/FileSystem.php';
 require_once __CORE__ . '/Lib/FileSystem/LocalStorage.php';
+require_once __CORE__ . '/Lib/FileSystem/File.php';
 
 class Storage
 {
