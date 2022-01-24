@@ -10,6 +10,7 @@ use DynamicFields\Fields\FieldOptions;
  * BaseFeild is base abstract class for custom fields implementations
  */
 abstract class BaseField {
+    private string $type = '';
     private string $key = '';
     private ?string $label = '';
     private string $witdh = '100%';
@@ -22,16 +23,27 @@ abstract class BaseField {
 
         $this->key = $key;
         $this->label = $label;
+
+        $this->type = $this->getTypeName();
+    }
+
+    /**
+     * @return string The Object Type Name
+     * @throws Exception if Method not implemented
+     */
+    public function getTypeName() : string {
+        throw new Exception('BaseField implementation should override method getTypeName!');
     }
 
     /**
      * Setup new field label
      *
      * @param string|null $label
-     * @return void
+     * @return $this
      */
-    public function setLabel( ?string $label ) : void {
+    public function setLabel( ?string $label ) : self {
         $this->label = $label;
+        return $this;
     }
 
     /**
@@ -50,10 +62,11 @@ abstract class BaseField {
      * @example 100%, 100px, etc...
      *
      * @param string $width - new field width
-     * @return void
+     * @return $this
      */
-    public function setWidth( string $width ) {
+    public function setWidth( string $width ) : self {
         $this->witdh = $width;
+        return $this;
     }
 
     /**

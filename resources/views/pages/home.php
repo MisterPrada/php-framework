@@ -29,8 +29,11 @@ use DynamicFields\Fields\TextField;
 <?php
     // Fields Test
     $textField = new TextField('test_field', 'Test Field!');
-    $textField->addAttribute('placeholder', 'This is placehoder');
-    $textField->addAttribute('style', 'border: 2px solid black; padding: 0.5em; font-size: 16px;');
+    $textField
+        ->setDefaultValue(1234)
+        ->setWidth(20)
+        ->addAttribute('placeholder', 'This is placehoder')
+        ->addAttribute('style', 'border: 2px solid black; padding: 0.5em; font-size: 16px;');
 
     $textFieldOptions = new FieldOptions('test');
 

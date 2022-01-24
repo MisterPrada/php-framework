@@ -4,18 +4,27 @@ namespace DynamicFields\Fields;
 use DynamicFields\Fields\FieldOptions;
 
 class TextField extends BaseField {
-    private ?string $value = '';
+    private ?string $value = null;
     private string $defaultValue = '';
     private array $attributes = [];
+
+    /**
+     * @return string The Object Type Name
+     * @throws Exception if Method not implemented
+     */
+    public function getTypeName() : string {
+        return 'TextField';
+    }
 
     /**
      * Set new TextField value
      *
      * @param string|null $value New TextField value
-     * @return void
+     * @return $this
      */
-    public function setValue( ?string $value ) : void {
-        $this->value = $value;
+    public function setValue( ?string $value ) : self {
+        $this->value = empty($value) ? null : $value;
+        return $this;
     }
 
     /**
@@ -31,11 +40,12 @@ class TextField extends BaseField {
     /**
      * Set new TextField default value
      *
-     * @param string|null $value New TextField default value
-     * @return void
+     * @param string|null $defaultValue New TextField default value
+     * @return $this
      */
-    public function setDefaultValue( ?string $defaultValue ) : void {
+    public function setDefaultValue( ?string $defaultValue ) : self {
         $this->defaultValue = $defaultValue ?? '';
+        return $this;
     }
 
     /**
@@ -48,14 +58,19 @@ class TextField extends BaseField {
     }
 
 
-    public function addAttribute( string $key, string $value ) : bool {
+    /**
+     * @param string $key Attribute name
+     * @param string $value Attribute value
+     * @return $this
+     */
+    public function addAttribute( string $key, string $value ) : self {
         if ( $key === 'id' ) {
-            return false;
+            return $this;
         }
 
         $this->attributes[$key] = "{$key}=\"$value\"";
 
-        return true;
+        return $this;
     }
 
     /// Overrided methods
