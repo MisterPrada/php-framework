@@ -7,7 +7,8 @@ return [
     'app' => [
         'debug' => true,
         'lang' => 'ru',
-        'languages' => ['ru', 'en']
+        'languages' => ['ru', 'en'],
+        'admin_panel_url' => 'admin'
     ],
 
     'database' => [
