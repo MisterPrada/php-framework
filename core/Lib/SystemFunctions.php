@@ -139,7 +139,18 @@ function csrf()
 }
 
 /** create unique token */
-function getApiToken()
+function createApiToken()
 {
     return hash('sha256', uniqid(mt_rand()));
+}
+
+/** base url */
+function baseUrl(){
+    if(isset($_SERVER['HTTPS'])){
+        $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+    }
+    else{
+        $protocol = 'http';
+    }
+    return $protocol . "://" . $_SERVER['HTTP_HOST'];
 }

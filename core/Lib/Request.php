@@ -16,7 +16,7 @@ class Request
         $this->headers = getallheaders();
         $this->files = $_FILES;
         $request = $_REQUEST;
-        array_shift($request);
+        //array_shift($request);
         $this->body = $request;
 
         $this->content = file_get_contents('php://input');

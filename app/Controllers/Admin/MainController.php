@@ -6,6 +6,6 @@ class MainController extends Controller
 {
     public function index()
     {
-        echo "test";
+        require_once __PUBLIC__ . 'admin-panel/index.html';
     }
 }

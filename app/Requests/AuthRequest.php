@@ -13,7 +13,7 @@ class AuthRequest extends Request
     {
         (new Rule)->fields([
             'email' => 'email|required',
-            'name' => 'required',
+            'password' => 'required',
         ]);
     }
 }

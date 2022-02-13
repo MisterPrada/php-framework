@@ -15,6 +15,7 @@ class Kernel
         if( isset(App::$route_parts[0]) ){
             if(config('app.admin_panel_url') == App::$route_parts[0] || config('app.admin_panel_url') == App::$route_parts[1]){
                 require_once __ROOT__ . 'routes/admin.php';
+                require_once __APP__ . 'Controllers/Admin/Api/ApiController.php';
                 require_once __APP__ . 'Controllers/Admin/Controller.php';
                 return;
             }

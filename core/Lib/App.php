@@ -7,12 +7,14 @@ require_once __CORE__ . '/lib/Lang.php';
 /** Main App class | Pattern singleton */
 class App
 {
+    public static $base_url; // Route URL host
     public static $route_url; // Route URL without host
     public static $route_parts; // Route Parts delimiter '/'
     public static $view_varibles = []; // Temp variables
     private static $instances = [];
 
     protected function __construct() {
+        static::$base_url = baseUrl();
         static::$route_url = explode("?", $_SERVER['REQUEST_URI'] ?? '/')[0];
         static::$route_parts = array_values(array_filter(explode('/', static::$route_url)));
         static::csrfToken();
