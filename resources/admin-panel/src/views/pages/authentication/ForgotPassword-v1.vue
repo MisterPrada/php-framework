@@ -72,7 +72,7 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import VuexyLogo from '@core/layouts/components/Logo.vue'
+import Logo from '@core/layouts/components/Logo.vue'
 import {
   BCard, BLink, BCardText, BCardTitle, BFormGroup, BFormInput, BForm, BButton,
 } from 'bootstrap-vue'
@@ -80,7 +80,7 @@ import { required, email } from '@validations'
 
 export default {
   components: {
-    VuexyLogo,
+    Logo,
     BCard,
     BLink,
     BCardText,

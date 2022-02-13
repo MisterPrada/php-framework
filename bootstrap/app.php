@@ -10,6 +10,7 @@ define('__RESOURCES__', __ROOT__ . 'resources/');
 define('__VIEWS__', __ROOT__ . 'resources/views/');
 define('__STORAGE__', __ROOT__ . 'storage/');
 define('__PUBLIC__', __ROOT__ . 'public/');
+define('__LIB__', __ROOT__ . 'lib/');
 
 try {
     // Get main config

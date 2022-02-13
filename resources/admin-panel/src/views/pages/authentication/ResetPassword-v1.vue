@@ -125,7 +125,7 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import VuexyLogo from '@core/layouts/components/Logo.vue'
+import Logo from '@core/layouts/components/Logo.vue'
 import {
   BCard, BCardTitle, BCardText, BForm, BFormGroup, BInputGroup, BInputGroupAppend, BLink, BFormInput, BButton,
 } from 'bootstrap-vue'
@@ -134,7 +134,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 
 export default {
   components: {
-    VuexyLogo,
+    Logo,
     BCard,
     BButton,
     BCardTitle,

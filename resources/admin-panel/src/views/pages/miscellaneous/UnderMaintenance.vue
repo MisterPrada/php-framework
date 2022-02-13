@@ -56,7 +56,7 @@
 import {
   BLink, BFormInput, BButton, BForm, BImg,
 } from 'bootstrap-vue'
-import VuexyLogo from '@core/layouts/components/Logo.vue'
+import Logo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
 
 export default {
@@ -66,7 +66,7 @@ export default {
     BButton,
     BForm,
     BImg,
-    VuexyLogo,
+    Logo,
   },
   data() {
     return {

@@ -177,14 +177,14 @@ import {
   BCard, BLink, BCardTitle, BCardText, BForm,
   BButton, BFormInput, BFormGroup, BInputGroup, BInputGroupAppend, BFormCheckbox,
 } from 'bootstrap-vue'
-import VuexyLogo from '@core/layouts/components/Logo.vue'
+import Logo from '@core/layouts/components/Logo.vue'
 import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {
-    VuexyLogo,
+    Logo,
     // BSV
     BCard,
     BLink,

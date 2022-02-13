@@ -40,12 +40,12 @@
 <script>
 /* eslint-disable global-require */
 import { BLink, BButton, BImg } from 'bootstrap-vue'
-import VuexyLogo from '@core/layouts/components/Logo.vue'
+import Logo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
 
 export default {
   components: {
-    VuexyLogo,
+    Logo,
     BLink,
     BButton,
     BImg,

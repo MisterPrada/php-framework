@@ -153,7 +153,7 @@
 <script>
 /* eslint-disable global-require */
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import VuexyLogo from '@core/layouts/components/Logo.vue'
+import Logo from '@core/layouts/components/Logo.vue'
 import {
   BRow, BCol, BCardTitle, BCardText, BForm, BFormGroup, BInputGroup, BInputGroupAppend, BLink, BFormInput, BButton, BImg,
 } from 'bootstrap-vue'
@@ -163,7 +163,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 
 export default {
   components: {
-    VuexyLogo,
+    Logo,
     BRow,
     BCol,
     BButton,

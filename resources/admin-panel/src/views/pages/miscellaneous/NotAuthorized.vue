@@ -33,13 +33,13 @@
 <script>
 /* eslint-disable global-require */
 import { BLink, BImg, BButton } from 'bootstrap-vue'
-import VuexyLogo from '@core/layouts/components/Logo.vue'
+import Logo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
 import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 
 export default {
   components: {
-    BLink, BImg, BButton, VuexyLogo,
+    BLink, BImg, BButton, Logo,
   },
   data() {
     return {

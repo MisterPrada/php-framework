@@ -206,7 +206,7 @@
 <script>
 /* eslint-disable global-require */
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import VuexyLogo from '@core/layouts/components/Logo.vue'
+import Logo from '@core/layouts/components/Logo.vue'
 import {
   BRow, BCol, BLink, BButton, BForm, BFormCheckbox, BFormGroup, BFormInput, BInputGroup, BInputGroupAppend, BImg, BCardTitle, BCardText,
 } from 'bootstrap-vue'
@@ -217,7 +217,7 @@ import useJwt from '@/auth/jwt/useJwt'
 
 export default {
   components: {
-    VuexyLogo,
+    Logo,
     BRow,
     BImg,
     BCol,
