@@ -1,0 +1,9 @@
+// ================================================================================================
+//  File Name: include.scss
+//  Description: Common components file to includ all theme specific custom components.
+// ================================================================================================
+
+// Overrides user variable
+@import 'scss/variables/_variables-components'; // Component custom variable override (for user purpose)
+@import 'variables'; // Component variable
+@import 'variables-dark'; // Dark variable

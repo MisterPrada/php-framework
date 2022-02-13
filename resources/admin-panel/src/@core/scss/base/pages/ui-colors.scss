@@ -1,0 +1,21 @@
+// ===============================================================================================
+//  File Name: colors.scss
+//  Description: Colors Page Content SCSS
+// ================================================================================================
+
+@import '../bootstrap-extended/include'; // Bootstrap includes
+@import '../components/include'; // Components includes
+
+.colors-list {
+  li {
+    padding: 0.4rem;
+    i,
+    svg {
+      height: 1.2rem;
+      width: 1.2rem;
+      top: 0;
+      position: relative;
+      margin-right: 0.25rem;
+    }
+  }
+}

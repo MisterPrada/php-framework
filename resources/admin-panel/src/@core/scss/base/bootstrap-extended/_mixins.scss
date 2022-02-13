@@ -1,0 +1,9 @@
+//  ===============================================================================================
+//  File Name: mixins.scss
+//  Description: Extended mixins file with new mixins features.
+//  ================================================================================================
+
+@import 'mixins/_type'; //(NEW)
+
+// Components
+@import 'mixins/_navs';
