@@ -22,6 +22,7 @@ Route::group(['prefix' => Lang::getLang()], function (){
 
 
 Route::get('/observer', ['Main', 'observer'])->name('main.observer');
+Route::get('/sendmail', ['Main', 'sendMail'])->name('main.sendmail');
 
 
 Route::post('/login', ['Auth/AuthController', 'login'])->name('auth.login');

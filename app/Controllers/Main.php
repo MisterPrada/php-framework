@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
+
 use App\Models\User;
+use Core\Lib\Mail;
 use Core\Lib\Request;
 
 class Main extends Controller
@@ -73,5 +75,11 @@ class Main extends Controller
 
     public function translateTest(){
         echo __('name', ['name' => "Jon", 'firstname' => 'Carter']);
+    }
+
+    public function sendMail(){
+        require_once __CORE__ . 'Lib/Mail.php';  // Mail lib
+
+        return (new Mail())->sendMessage('lesha.skorpion@gmail.com', 'information subject', 'Mister&<b>Prada</b>');
     }
 }
