@@ -5,7 +5,7 @@ export default {
   state: {
     layout: {
       isRTL: $themeConfig.layout.isRTL,
-      skin: localStorage.getItem('vuexy-skin') || $themeConfig.layout.skin,
+      skin: localStorage.getItem('admin-panel-skin') || $themeConfig.layout.skin,
       routerTransition: $themeConfig.layout.routerTransition,
       type: $themeConfig.layout.type,
       contentWidth: $themeConfig.layout.contentWidth,
@@ -31,7 +31,7 @@ export default {
       state.layout.skin = skin
 
       // Update value in localStorage
-      localStorage.setItem('vuexy-skin', skin)
+      localStorage.setItem('admin-panel-skin', skin)
 
       // Update DOM for dark-layout
       if (skin === 'dark') document.body.classList.add('dark-layout')

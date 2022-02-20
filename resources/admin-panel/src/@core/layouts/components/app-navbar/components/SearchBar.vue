@@ -21,13 +21,13 @@
       <div class="search-input-icon">
         <feather-icon icon="SearchIcon" />
       </div>
-      <!-- <input type="text" placeholder="Explore Vuexy...." class="form-control-input"> -->
+      <!-- <input type="text" placeholder="Explore..." class="form-control-input"> -->
       <!-- @keyup.esc="escPressed" -->
       <!-- @keyup.enter="suggestionSelected" -->
       <b-form-input
         v-if="showSearchBar"
         v-model="searchQuery"
-        placeholder="Explore Vuexy"
+        placeholder="Explore..."
         autofocus
         autocomplete="off"
         @keyup.up="increaseIndex(false)"

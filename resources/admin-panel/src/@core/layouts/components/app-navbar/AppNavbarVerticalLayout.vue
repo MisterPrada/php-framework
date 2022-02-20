@@ -20,15 +20,15 @@
     <div class="bookmark-wrapper align-items-center flex-grow-1 d-none d-lg-flex">
 
       <!-- Bookmarks Container -->
-      <bookmarks />
+<!--      <bookmarks />-->
     </div>
 
     <b-navbar-nav class="nav align-items-center ml-auto">
-      <locale />
-      <dark-Toggler class="d-none d-lg-block" />
+<!--      <locale />-->
+<!--      <dark-Toggler class="d-none d-lg-block" />-->
       <search-bar />
-      <cart-dropdown />
-      <notification-dropdown />
+<!--      <cart-dropdown />-->
+<!--      <notification-dropdown />-->
       <user-dropdown />
     </b-navbar-nav>
   </div>

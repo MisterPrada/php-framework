@@ -35,7 +35,7 @@
           <b-form-input
             id="boomark-search-input"
             v-model="searchQuery"
-            placeholder="Explore Vuexy..."
+            placeholder="Explore..."
             autofocus
           />
         </div>
