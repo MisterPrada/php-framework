@@ -55,6 +55,8 @@ export default function useUsersList() {
   })
 
   const fetchUsers = (ctx, callback) => {
+    console.log('testing resolution');
+
     store
       .dispatch('app-user/fetchUsers', {
         q: searchQuery.value,

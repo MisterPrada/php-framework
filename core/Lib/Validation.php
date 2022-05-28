@@ -22,7 +22,7 @@ class Validation
                 $rule = explode(':', $rule);
 
                 $this->fieldName = $fieldName;
-                if($rule[1]){
+                if(isset($rule[1])){
                     $args[] = $rule[1];
                 }
                 $args[] = $request->{$fieldName};

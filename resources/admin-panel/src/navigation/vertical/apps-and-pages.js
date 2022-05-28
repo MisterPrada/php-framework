@@ -3,6 +3,16 @@ export default [
     header: 'Apps & Pages',
   },
   {
+    title: 'Users',
+    icon: 'UserIcon',
+    children: [
+      {
+        title: 'List',
+        route: 'users-list',
+      },
+    ],
+  },
+  {
     title: 'Email',
     route: 'apps-email',
     icon: 'MailIcon',

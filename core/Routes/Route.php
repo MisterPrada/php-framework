@@ -158,7 +158,7 @@ class Route
                     $actionArgs = new \ReflectionMethod($controllerClass, $obj->controller[1]);
                     $param = end($actionArgs->getParameters());
 
-                    if( $param && $param = $param->getClass() ){
+                    if( $param && $param = new \ReflectionClass($param->getType()->getName()) ){
                         $args[] = new $param->name;
                     }
 

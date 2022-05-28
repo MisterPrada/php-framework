@@ -185,6 +185,11 @@ export default [
   // *--------- USER ---- ---------------------------------------*
   // *===============================================---*
   {
+    path: '/users/list',
+    name: 'users-list',
+    component: () => import('@/views/apps/user/users-list/UsersList.vue'),
+  },
+  {
     path: '/apps/users/list',
     name: 'apps-users-list',
     component: () => import('@/views/apps/user/users-list/UsersList.vue'),
